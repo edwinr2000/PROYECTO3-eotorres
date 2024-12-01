@@ -16,4 +16,3 @@ class Product(Base):
             'price': self.price,
             'calories': self.calories
         }
-}

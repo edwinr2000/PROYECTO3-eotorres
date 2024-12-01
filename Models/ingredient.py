@@ -18,4 +18,3 @@ class Ingredient(Base):
             'calories': self.calories,
             'is_healthy': self.is_healthy
         }
-}
