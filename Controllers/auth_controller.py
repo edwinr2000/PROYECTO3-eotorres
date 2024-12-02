@@ -49,7 +49,18 @@ def logout():
 def admin_dashboard():
     if not current_user.es_admin:
         return render_template('error.html'), 403
-    return render_template('admin_dashboard.html')
+
+    # Obtener todos los productos e ingredientes
+    from Models.product import Product
+    from Models.ingredient import Ingredient
+    products = session.query(Product).all()
+    ingredients = session.query(Ingredient).all()
+
+    # Verificar que se estén recuperando datos correctamente
+    print(f"Productos: {products}")
+    print(f"Ingredientes: {ingredients}")
+
+    return render_template('admin_dashboard.html', products=products, ingredients=ingredients)
 
 # Ruta para el dashboard de empleados
 @auth_bp.route('/employee', methods=['GET'])
@@ -57,15 +68,22 @@ def admin_dashboard():
 def employee_dashboard():
     if not current_user.es_empleado:
         return render_template('error.html'), 403
-    return render_template('employee_dashboard.html')
 
-# Ruta para el dashboard de usuarios comunes
-@auth_bp.route('/user', methods=['GET'])
-@login_required
-def user_dashboard():
-    if current_user.es_admin or current_user.es_empleado:
-        return redirect(url_for('auth.error'))
-    return render_template('user_dashboard.html')
+    # Obtener todos los productos e ingredientes
+    from Models.product import Product
+    from Models.ingredient import Ingredient
+
+    # Asegurarse de que se recuperan los productos e ingredientes
+    products = session.query(Product).all()
+    ingredients = session.query(Ingredient).all()
+
+    # Verificar que se están recuperando los datos correctamente
+    print(f"Productos: {len(products)} productos encontrados.")
+    print(f"Ingredientes: {len(ingredients)} ingredientes encontrados.")
+
+    return render_template('employee_dashboard.html', products=products, ingredients=ingredients)
+
+
 
 # Ruta para manejar errores de acceso
 @auth_bp.route('/error', methods=['GET'])

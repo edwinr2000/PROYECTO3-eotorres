@@ -38,12 +38,20 @@ def get_profitability_by_product_id(product_id):
     profitability = product.price - (product.calories * 0.01)
     return jsonify({'id': product.id, 'name': product.name, 'profitability': profitability})
 
+
+@product_bp.route('/cost/<int:product_id>', methods=['GET'])
+def get_production_cost(product_id):
+    product = session.query(Product).get(product_id)
+    if not product:
+        return jsonify({'error': 'Producto no encontrado'}), 404
+    return jsonify({'id': product.id, 'name': product.name, 'production_cost': product.production_cost})
+
+
 @product_bp.route('/sell/<int:product_id>', methods=['POST'])
 def sell_product(product_id):
     product = session.query(Product).get(product_id)
     if not product:
         return jsonify({'error': 'Producto no encontrado'}), 404
-    # Simula la venta del producto
     return jsonify({'message': f'Producto {product.name} vendido con éxito.'})
 
 @product_bp.route('/restock/<int:product_id>', methods=['POST'])
@@ -51,5 +59,12 @@ def restock_product(product_id):
     product = session.query(Product).get(product_id)
     if not product:
         return jsonify({'error': 'Producto no encontrado'}), 404
-    # Simula el reabastecimiento
     return jsonify({'message': f'Producto {product.name} reabastecido con éxito.'})
+
+
+@product_bp.route('/renew/<int:product_id>', methods=['POST'])
+def renew_product(product_id):
+    product = session.query(Product).get(product_id)
+    if not product:
+        return jsonify({'error': 'Producto no encontrado'}), 404
+    return jsonify({'message': f'Inventario de producto {product.name} renovado con éxito.'})
